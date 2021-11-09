@@ -1,7 +1,10 @@
 import ModernRIBs
 
+// XXXRouting에 attach할 RIBlet 메소드 정의
 protocol FinanceHomeRouting: ViewableRouting {
   // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
+    func attachSuperPayDashboard()
+    func attachCardOnFileDashboard()
 }
 
 protocol FinanceHomePresentable: Presentable {
@@ -28,6 +31,9 @@ final class FinanceHomeInteractor: PresentableInteractor<FinanceHomePresentable>
   override func didBecomeActive() {
     super.didBecomeActive()
     // TODO: Implement business logic here.
+      
+      router?.attachSuperPayDashboard()
+      router?.attachCardOnFileDashboard()
   }
   
   override func willResignActive() {
