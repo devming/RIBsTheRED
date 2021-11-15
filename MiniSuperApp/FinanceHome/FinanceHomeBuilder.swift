@@ -6,8 +6,8 @@ protocol FinanceHomeDependency: Dependency {
 }
 
 // 상위 Component에서 하위 RIBlet들의 의존성들을 채택한다.
-final class FinanceHomeComponent: Component<FinanceHomeDependency>, SuperPayDashBoardDependency, CardOnFileDashboardDependency {
-    let cardsOnFileRepository: CardOnFileRepository
+final class FinanceHomeComponent: Component<FinanceHomeDependency>, SuperPayDashBoardDependency, CardOnFileDashboardDependency, AddPaymentMethodDependency {
+    let cardOnFileRepository: CardOnFileRepository
     var balance: ReadOnlyCurrentValuePublisher<Double> { balancePublisher }
     
     private let balancePublisher: CurrentValuePublisher<Double>
@@ -19,7 +19,7 @@ final class FinanceHomeComponent: Component<FinanceHomeDependency>, SuperPayDash
         cardOnFileRepository: CardOnFileRepository
     ) {
         self.balancePublisher = balance
-        self.cardsOnFileRepository = cardOnFileRepository
+        self.cardOnFileRepository = cardOnFileRepository
         super.init(dependency: dependency)
     }
 }
@@ -49,12 +49,14 @@ final class FinanceHomeBuilder: Builder<FinanceHomeDependency>, FinanceHomeBuild
         
         let superPayDashBoardBuilder = SuperPayDashBoardBuilder(dependency: component)
         let cardOnFileDashboardBuilder = CardOnFileDashboardBuilder(dependency: component)
+        let addPaymentMethodBuilder = AddPaymentMethodBuilder(dependency: component)
         
         return FinanceHomeRouter(
             interactor: interactor,
             viewController: viewController,
             superPayDashBoardBuildable: superPayDashBoardBuilder,
-            cardOnFileDashboardBuildable: cardOnFileDashboardBuilder
+            cardOnFileDashboardBuildable: cardOnFileDashboardBuilder,
+            addPaymentMethodBuildable: addPaymentMethodBuilder
         )
     }
 }
