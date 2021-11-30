@@ -22,6 +22,7 @@ protocol SuperPayDashBoardPresentable: Presentable {
 
 protocol SuperPayDashBoardListener: AnyObject {
     // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
+    func superPayDashboardDidTapTopup()
 }
 
 protocol SuperPayDashboardInteractorDependency {
@@ -72,4 +73,9 @@ final class SuperPayDashBoardInteractor: PresentableInteractor<SuperPayDashBoard
         super.willResignActive()
         // TODO: Pause any business logic.
     }
+    
+    func topupButtonDidTap() {
+        listener?.superPayDashboardDidTapTopup()
+    }
+    
 }
