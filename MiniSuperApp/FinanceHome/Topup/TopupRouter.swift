@@ -118,12 +118,13 @@ final class TopupRouter: Router<TopupInteractable>, TopupRouting {
         enterAmountRouting = nil
     }
 
-    func attachCardOnFile() {
+    func attachCardOnFile(paymentMethods: [PaymentMethod]) {
         if cardOnFileRouting != nil {
             return
         }
-        // topup RIBlet에서는 CardOnFile RIBlet을 어떻게 보여줘야하는지 판단할 수 있다.
-        let router = cardOnFileBuildable.build(withListener: interactor)
+        // 1. topup RIBlet에서는 CardOnFile RIBlet을 어떻게 보여줘야하는지 판단할 수 있다.
+        // 2. paymentMethods(RIBlet간 전달 데이터)를 CardOnFile RIBlet으로 전달하기 위해 build메소드를 사용한다.
+        let router = cardOnFileBuildable.build(withListener: interactor, paymentMethods: paymentMethods)
         navigationControllable?.pushViewController(router.viewControllable, animated: true)
         cardOnFileRouting = router
         attachChild(router)

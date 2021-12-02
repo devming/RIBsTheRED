@@ -5,6 +5,12 @@
 //  Created by devming on 2021/11/15.
 //
 
+/**
+ CardOnFile과 EnterAmount RIBlet은 서로 모르기 때문에 직접 데이터를 주고 받을 수 없고(그렇게 해서도 안되고) TopupRIBlet을 통해 데이터를 주고 받아야한다.
+ 
+ attach할 때 데이터를 넘겨주면 된다.
+ */
+
 import ModernRIBs
 
 protocol TopupRouting: Routing {
@@ -15,7 +21,7 @@ protocol TopupRouting: Routing {
     func detachAddPaymentMethod()
     func attachEnterAmount()
     func detachEnterAmount()
-    func attachCardOnFile()
+    func attachCardOnFile(paymentMethods: [PaymentMethod])
     func detachCardOnFile()
 }
 
@@ -35,6 +41,10 @@ final class TopupInteractor: Interactor, TopupInteractable, AddPaymentMethodList
     
     let presentationDelegateProxy: AdaptivePresentationControllerDelegateProxy
 
+    private var paymentMethods: [PaymentMethod] {
+        dependency.cardOnFileRepository.cardOnFile.value
+    }
+    
     private let dependency: TopupInteractorDependency
     // TODO: Add additional dependencies to constructor. Do not perform any logic
     // in constructor.
@@ -85,7 +95,10 @@ final class TopupInteractor: Interactor, TopupInteractable, AddPaymentMethodList
     }
     
     func enterAmountDidTapPaymentMethod() {
-        router?.attachCardOnFile()
-        
+        router?.attachCardOnFile(paymentMethods: paymentMethods)
+    }
+    
+    func cardOnFileDidTapClose() {
+        router?.detachCardOnFile()
     }
 }

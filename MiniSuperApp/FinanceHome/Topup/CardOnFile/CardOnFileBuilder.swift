@@ -20,7 +20,7 @@ final class CardOnFileComponent: Component<CardOnFileDependency> {
 // MARK: - Builder
 //40:27
 protocol CardOnFileBuildable: Buildable {
-    func build(withListener listener: CardOnFileListener) -> CardOnFileRouting
+    func build(withListener listener: CardOnFileListener, paymentMethods: [PaymentMethod]) -> CardOnFileRouting
 }
 
 final class CardOnFileBuilder: Builder<CardOnFileDependency>, CardOnFileBuildable {
@@ -29,10 +29,11 @@ final class CardOnFileBuilder: Builder<CardOnFileDependency>, CardOnFileBuildabl
         super.init(dependency: dependency)
     }
 
-    func build(withListener listener: CardOnFileListener) -> CardOnFileRouting {
+    func build(withListener listener: CardOnFileListener, paymentMethods: [PaymentMethod]) -> CardOnFileRouting {
         let component = CardOnFileComponent(dependency: dependency)
         let viewController = CardOnFileViewController()
-        let interactor = CardOnFileInteractor(presenter: viewController)
+        // 데이터를 가지고 UI를 보여줘야하니까 CardOnFileInteractor에게 전달한다.
+        let interactor = CardOnFileInteractor(presenter: viewController, paymentMethods: paymentMethods)
         interactor.listener = listener
         return CardOnFileRouter(interactor: interactor, viewController: viewController)
     }
