@@ -21,6 +21,7 @@ protocol EnterAmountListener: AnyObject {
     
     // 닫는걸 부모에게 알려줌
     func enterAmountDidTapClose()
+    func enterAmountDidTapPaymentMethod()
 }
 
 final class EnterAmountInteractor: PresentableInteractor<EnterAmountPresentable>, EnterAmountInteractable, EnterAmountPresentableListener {
@@ -51,7 +52,7 @@ final class EnterAmountInteractor: PresentableInteractor<EnterAmountPresentable>
     }
     
     func didTapPaymentMethod() {
-        
+        listener?.enterAmountDidTapPaymentMethod()
     }
     
     func didTapTopup(with amount: Double) {
