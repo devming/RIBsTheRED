@@ -15,28 +15,39 @@ import ModernRIBs
 
 protocol TopupRouting: Routing {
     func cleanupViews()
-    // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
+    // TODO: Declare methods the interactor can invoke to manage sub-tree via the router. -> interactor에서 호출함으로써 sub-tree 관리하는 router 관련 함수들을 정의한다.
     
+    // 결제 수단 추가 화면
     func attachAddPaymentMethod()
     func detachAddPaymentMethod()
+    
+    // 카드 충전 화면
     func attachEnterAmount()
     func detachEnterAmount()
+    
+    // 카드 리스트 화면
     func attachCardOnFile(paymentMethods: [PaymentMethod])
     func detachCardOnFile()
 }
 
+// topup RIBlet 자체 리스너
 protocol TopupListener: AnyObject {
     // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
+    
     func topupDidClose()
     func topupDidFinish()
 }
 
+// TopupInteractor의 의존성 - 필요한 의존성들을 한곳에 몰아넣고 주입받음
 protocol TopupInteractorDependency {
     var cardOnFileRepository: CardOnFileRepository { get }
     var paymentMethodStream: CurrentValuePublisher<PaymentMethod> { get }
 }
 
-final class TopupInteractor: Interactor, TopupInteractable, AddPaymentMethodListener, AdaptivePresentationControllerDelegate {
+// TopInteractor는 TopInteractorable 프로토콜을 채택한다.
+// Interactor에서 구현해주고 싶은 것은 Interactorable에 프로토콜을 달아주면 된다.
+// 이것은 주로 자식 Interactorable들을 채택하게 되는데, 이런 것을 통해 봤을 때, interactor끼리 통신한다는 것이 이런 의미인것 같음
+final class TopupInteractor: Interactor, TopupInteractable,  AdaptivePresentationControllerDelegate {
 
     weak var router: TopupRouting?
     weak var listener: TopupListener?

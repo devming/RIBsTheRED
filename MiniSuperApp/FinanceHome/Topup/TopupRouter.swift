@@ -23,9 +23,9 @@ final class TopupRouter: Router<TopupInteractable>, TopupRouting {
 
     private var navigationControllable: NavigationControllerable?
     
+    // TODO: Constructor inject child builder protocols to allow building children.
     private let addPaymentMethodBuildable: AddPaymentMethodBuildable
     private var addPaymentMethodRouting: Routing?
-    // TODO: Constructor inject child builder protocols to allow building children.
     
     private let enterAmountBuildable: EnterAmountBuildable
     private var enterAmountRouting: Routing?
