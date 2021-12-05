@@ -12,13 +12,15 @@ protocol TopupDependency: Dependency {
     // 부모 RIBlet이 ViewController를 하나 지정해줘야한다.
     var topupBaseViewController: ViewControllable { get }
     var cardOnFileRepository: CardOnFileRepository { get }
+    var superPayRepository: SuperPayRepository { get }
     // TODO: Declare the set of dependencies required by this RIB, but won't be
     // created by this RIB.
 }
 
 final class TopupComponent: Component<TopupDependency>, TopupInteractorDependency, AddPaymentMethodDependency, EnterAmountDependency, CardOnFileDependency {
-    var selectedPaymentMethod: ReadOnlyCurrentValuePublisher<PaymentMethod> { paymentMethodStream }
     
+    var superPayRepository: SuperPayRepository { dependency.superPayRepository }
+    var selectedPaymentMethod: ReadOnlyCurrentValuePublisher<PaymentMethod> { paymentMethodStream }
     var cardOnFileRepository: CardOnFileRepository { dependency.cardOnFileRepository }
     fileprivate var topupBaseViewController: ViewControllable {  dependency.topupBaseViewController }
 

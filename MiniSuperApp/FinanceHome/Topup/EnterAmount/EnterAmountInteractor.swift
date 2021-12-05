@@ -7,6 +7,7 @@
 
 import ModernRIBs
 import Combine
+import Foundation
 
 protocol EnterAmountRouting: ViewableRouting {
     // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
@@ -17,18 +18,24 @@ protocol EnterAmountPresentable: Presentable {
     // TODO: Declare methods the interactor can invoke the presenter to present data.
     
     func updateSelectedPaymentMethod(with viewModel: SelectedPaymentMethodViewModel)
+    func startLoading()
+    func stopLoading()
 }
 
 protocol EnterAmountListener: AnyObject {
     // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
     
-    // 닫는걸 부모에게 알려줌
+    // 닫기 이벤트를 부모에게 알려줌
     func enterAmountDidTapClose()
+    // 충전 방법 선택 버튼 이벤트를 부모에게 알려줌
     func enterAmountDidTapPaymentMethod()
+    // 충전이 완료되었다는 이벤트를 부모에게 알려줌
+    func enterAmountDidFinishTopup()
 }
 
 protocol EnterAmountInteractorDependency {
     var selectedPaymentMethod: ReadOnlyCurrentValuePublisher<PaymentMethod> { get }
+    var superPayRepository: SuperPayRepository { get }
 }
 
 final class EnterAmountInteractor: PresentableInteractor<EnterAmountPresentable>, EnterAmountInteractable, EnterAmountPresentableListener {
@@ -76,7 +83,21 @@ final class EnterAmountInteractor: PresentableInteractor<EnterAmountPresentable>
     }
     
     func didTapTopup(with amount: Double) {
+        presenter.startLoading()
         
+        dependency
+            .superPayRepository
+            .topup(
+                amount: amount,
+                paymentMethodID: dependency.selectedPaymentMethod.value.id
+            ).receive(on: DispatchQueue.main).sink(
+                receiveCompletion: { [weak self] _ in
+                    self?.presenter.stopLoading()
+                },
+                receiveValue: { [weak self] in
+                    self?.listener?.enterAmountDidFinishTopup()
+                }
+            ).store(in: &cancellables)
     }
     
 }

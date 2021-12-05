@@ -59,6 +59,7 @@ final class SuperPayDashBoardInteractor: PresentableInteractor<SuperPayDashBoard
             .map { NSNumber(value: $0) }
             .compactMap { [weak self] balance in  self?.dependency.balanceFormatter.string(from: balance)
             }
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: self.presenter.updateBalance)
             .store(in: &cancellable)
 //        dependency.balance.sink { [weak self] balance in

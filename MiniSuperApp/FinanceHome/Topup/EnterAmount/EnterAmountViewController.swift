@@ -7,23 +7,11 @@ protocol EnterAmountPresentableListener: AnyObject {
   func didTapTopup(with amount: Double)
 }
 
-final class EnterAmountViewController: UIViewController, EnterAmountPresentable, EnterAmountViewControllable {
+// EnterAmountPresentable
+final class EnterAmountViewController: UIViewController, EnterAmountViewControllable {
   
   weak var listener: EnterAmountPresentableListener?
   
-  func updateSelectedPaymentMethod(with viewModel: SelectedPaymentMethodViewModel) {
-    selectedPaymentMethodView.update(with: viewModel)
-  }
-  
-  func startLoading() {
-    activityIndicator.startAnimating()
-    ctaButton.isEnabled = false
-  }
-  
-  func stopLoading() {
-    activityIndicator.stopAnimating()
-    ctaButton.isEnabled = true
-  }
   
   private lazy var selectedPaymentMethodView: SelectedPaymentMethodView = {
     let view = SelectedPaymentMethodView()
@@ -121,4 +109,22 @@ final class EnterAmountViewController: UIViewController, EnterAmountPresentable,
   private func didTapPaymentMethod() {
     listener?.didTapPaymentMethod()
   }
+}
+
+// EnterAmountPresentable
+// - Interactor에서 호출
+extension EnterAmountViewController: EnterAmountPresentable {
+    func updateSelectedPaymentMethod(with viewModel: SelectedPaymentMethodViewModel) {
+        selectedPaymentMethodView.update(with: viewModel)
+    }
+    
+    func startLoading() {
+        activityIndicator.startAnimating()
+        ctaButton.isEnabled = false
+    }
+    
+    func stopLoading() {
+        activityIndicator.stopAnimating()
+        ctaButton.isEnabled = true
+    }
 }
