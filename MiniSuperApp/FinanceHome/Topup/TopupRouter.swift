@@ -98,12 +98,24 @@ final class TopupRouter: Router<TopupInteractable>, TopupRouting {
     }
     
     func attachEnterAmount() {
+        // 1. 처음 화면에서 EnterAmount를 띄우는 경우는 모달로 띄우고
+        // 2. 카드 추가화면에서 EnterAmount를 띄우는 경우는 Navigation Push를 해줘야한다.
         if enterAmountRouting != nil {
             return
         }
         
         let router = enterAmountBuildable.build(withListener: interactor)
-        presentInsideNavigation(router.viewControllable)
+        
+        if let navigation = navigationControllable {
+            // navigation이 있다면(카드 추가화면[AddPaymentMethod]에서 이동하는 것이라면)
+            // 이동할 때, 기존의 스택(AddPaymentMethod)은 날려주고 새로 추가하는 화면만 남는 방식의 push를 수행한다.
+            navigation.setViewControllers([router.viewControllable])
+            // 그리고 이미 존재했던 View를 날렸기 때문에, router도 날려줘야한다.
+            resetChildRouting()
+        } else {
+            presentInsideNavigation(router.viewControllable)
+        }
+        
         attachChild(router)
         enterAmountRouting = router
     }
@@ -139,6 +151,18 @@ final class TopupRouter: Router<TopupInteractable>, TopupRouting {
         navigationControllable?.popViewController(animated: true)
         detachChild(router)
         cardOnFileRouting = nil
+    }
+    
+    private func resetChildRouting() {
+        if let cardOnFileRouting = cardOnFileRouting {
+            detachChild(cardOnFileRouting)
+            self.cardOnFileRouting = nil
+        }
+        
+        if let addPaymentMethodRouting = addPaymentMethodRouting {
+            detachChild(addPaymentMethodRouting)
+            self.addPaymentMethodRouting = nil
+        }
     }
     
     // MARK: - Private

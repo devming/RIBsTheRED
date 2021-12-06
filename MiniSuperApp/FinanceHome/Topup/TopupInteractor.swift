@@ -100,7 +100,11 @@ final class TopupInteractor: Interactor, TopupInteractable,  AdaptivePresentatio
     }
     
     func addPaymentMethodDidAddCard(paymentMethod: PaymentMethod) {
-        
+        // 입력된 정보로 카드 추가 버튼을 누르면
+        // 새로 추가된 카드 정보를 stream으로 보내주고
+        dependency.paymentMethodStream.send(paymentMethod)
+        // 금액 입력 화면을 보여준다.
+        router?.attachEnterAmount()
     }
     
     func enterAmountDidTapClose() {
