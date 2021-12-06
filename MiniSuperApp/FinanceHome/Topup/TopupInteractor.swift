@@ -18,7 +18,7 @@ protocol TopupRouting: Routing {
     // TODO: Declare methods the interactor can invoke to manage sub-tree via the router. -> interactor에서 호출함으로써 sub-tree 관리하는 router 관련 함수들을 정의한다.
     
     // 결제 수단 추가 화면
-    func attachAddPaymentMethod()
+    func attachAddPaymentMethod(closeButtonType: DismissButtonType)
     func detachAddPaymentMethod()
     
     // 카드 충전 화면
@@ -28,6 +28,8 @@ protocol TopupRouting: Routing {
     // 카드 리스트 화면
     func attachCardOnFile(paymentMethods: [PaymentMethod])
     func detachCardOnFile()
+    
+    func popToRoot()
 }
 
 // topup RIBlet 자체 리스너
@@ -53,6 +55,8 @@ final class TopupInteractor: Interactor, TopupInteractable,  AdaptivePresentatio
     weak var listener: TopupListener?
     
     let presentationDelegateProxy: AdaptivePresentationControllerDelegateProxy
+    
+    private var isEnterAmount: Bool = false
 
     private var paymentMethods: [PaymentMethod] {
         dependency.cardOnFileRepository.cardOnFile.value
@@ -74,12 +78,14 @@ final class TopupInteractor: Interactor, TopupInteractable,  AdaptivePresentatio
         // TODO: Implement business logic here.
         
         if let card = dependency.cardOnFileRepository.cardOnFile.value.first {
+            isEnterAmount = true
             dependency.paymentMethodStream.send(card)
             // 금액 입력 화면
             router?.attachEnterAmount()
         } else {
+            isEnterAmount = false
             // 카드 추가 화면
-            router?.attachAddPaymentMethod()
+            router?.attachAddPaymentMethod(closeButtonType: .close)
         }
     }
 
@@ -96,15 +102,25 @@ final class TopupInteractor: Interactor, TopupInteractable,  AdaptivePresentatio
     
     func addPaymentMethodDidTapClose() {
         router?.detachAddPaymentMethod()
-        listener?.topupDidClose()
+        if isEnterAmount == false {
+            listener?.topupDidClose()
+        }
+//        listener?.topupDidClose()
     }
     
     func addPaymentMethodDidAddCard(paymentMethod: PaymentMethod) {
         // 입력된 정보로 카드 추가 버튼을 누르면
         // 새로 추가된 카드 정보를 stream으로 보내주고
         dependency.paymentMethodStream.send(paymentMethod)
-        // 금액 입력 화면을 보여준다.
-        router?.attachEnterAmount()
+        
+        // AddPaymentMethod를 추가하는 시점에 EnterAmount가 이미 있느냐 없느냐에 따라
+        if isEnterAmount {
+            router?.popToRoot()
+        } else {
+            isEnterAmount = true
+            // 금액 입력 화면을 보여준다.
+            router?.attachEnterAmount()
+        }
     }
     
     func enterAmountDidTapClose() {
@@ -127,6 +143,7 @@ final class TopupInteractor: Interactor, TopupInteractable,  AdaptivePresentatio
     
     func cardOnFileDidTapAddCard() {
         // attach add card
+        router?.attachAddPaymentMethod(closeButtonType: .back)
     }
     
     func cardOnFileDidSelect(at index: Int) {
