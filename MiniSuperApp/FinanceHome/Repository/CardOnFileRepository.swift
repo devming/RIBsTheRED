@@ -14,7 +14,7 @@ protocol CardOnFileRepository {
     func addCard(info: AddPaymentMethodInfo) -> AnyPublisher<PaymentMethod, Error>
 }
 
-final class CardOnfileRepositoryImp: CardOnFileRepository {
+final class CardOnFileRepositoryImp: CardOnFileRepository {
     var cardOnFile: ReadOnlyCurrentValuePublisher<[PaymentMethod]> {
         return paymentMethodSubject
     }

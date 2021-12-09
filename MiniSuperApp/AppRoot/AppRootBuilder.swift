@@ -37,7 +37,7 @@ final class AppRootBuilder: Builder<AppRootDependency>, AppRootBuildable {
   func build() -> (launchRouter: LaunchRouting, urlHandler: URLHandler) {
     let component = AppRootComponent(
         dependency: dependency,
-        cardOnFileRepository: CardOnfileRepositoryImp(),
+        cardOnFileRepository: CardOnFileRepositoryImp(),
         superPayRepository: SuperPayRepositoryImp()
     )
     
