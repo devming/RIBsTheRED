@@ -6,6 +6,10 @@
 //
 
 import ModernRIBs
+import FinanceRepository
+import AddPaymentMethod
+import CombineUtil
+import FinanceEntity
 
 // Dependency: RIBlet이 동작하기 위해 필요한 것들을 선언해두는 곳
 protocol TopupDependency: Dependency {

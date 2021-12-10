@@ -5,24 +5,40 @@ import PackageDescription
 
 let package = Package(
     name: "Finance",
+    platforms: [.iOS(.v14)],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "Finance",
-            targets: ["Finance"]),
+            name: "AddPaymentMethod",
+            targets: ["AddPaymentMethod"]),
+        .library(
+            name: "FinanceEntity",
+            targets: ["FinanceEntity"]),
+        .library(
+            name: "FinanceRepository",
+            targets: ["FinanceRepository"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+        .package(name: "ModernRIBs", url: "https://github.com/DevYeom/ModernRIBs", .exact("1.0.1")),
+        .package(path: "../Platform")
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "Finance",
+            name: "AddPaymentMethod",
+            dependencies: [
+                "ModernRIBs",
+                "FinanceEntity",
+                "FinanceRepository",
+                .product(name: "RIBsUtil", package: "Platform"),
+                .product(name: "SuperUI", package: "Platform")
+            ]),
+        .target(
+            name: "FinanceEntity",
             dependencies: []),
-        .testTarget(
-            name: "FinanceTests",
-            dependencies: ["Finance"]),
+        .target(
+            name: "FinanceRepository",
+            dependencies: [
+                "FinanceEntity", // 같은 패키지안에 다른 모듈 참조
+                .product(name: "CombineUtil", package: "Platform") // 다른 패키지 참조할 경우
+            ]),
     ]
 )

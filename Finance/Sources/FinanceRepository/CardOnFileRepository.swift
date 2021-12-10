@@ -7,15 +7,20 @@
 
 import Foundation
 import Combine
+import FinanceEntity
+import CombineUtil
+
 
 // server API를 호출해서 그 유저에게 등록된 카드 목록을 가져온다.
-protocol CardOnFileRepository {
+public protocol CardOnFileRepository {
     var cardOnFile: ReadOnlyCurrentValuePublisher<[PaymentMethod]> { get }
     func addCard(info: AddPaymentMethodInfo) -> AnyPublisher<PaymentMethod, Error>
 }
 
-final class CardOnFileRepositoryImp: CardOnFileRepository {
-    var cardOnFile: ReadOnlyCurrentValuePublisher<[PaymentMethod]> {
+public final class CardOnFileRepositoryImp: CardOnFileRepository {
+    public init() { }
+    
+    public var cardOnFile: ReadOnlyCurrentValuePublisher<[PaymentMethod]> {
         return paymentMethodSubject
     }
     
@@ -33,7 +38,7 @@ final class CardOnFileRepositoryImp: CardOnFileRepository {
 //        PaymentMethod(id: "4", name: "토스카드", digits: "5134", color: "#33ffaaff", isPrimary: false),
     ])
     
-    func addCard(info: AddPaymentMethodInfo) -> AnyPublisher<PaymentMethod, Error> {
+    public func addCard(info: AddPaymentMethodInfo) -> AnyPublisher<PaymentMethod, Error> {
         let paymentMethod = PaymentMethod(id: "00", name: "New 카드", digits: "\(info.number.suffix(4))", color: "", isPrimary: false)
         
         var new = paymentMethodSubject.value

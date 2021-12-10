@@ -7,6 +7,7 @@
 
 import ModernRIBs
 import Foundation
+import CombineUtil
 
 // 부모로 부터 받고 싶은 dependency는 여기서 선언
 protocol SuperPayDashBoardDependency: Dependency {

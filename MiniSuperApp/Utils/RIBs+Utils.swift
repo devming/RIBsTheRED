@@ -1,19 +1,6 @@
 import UIKit
 import ModernRIBs
 
-public enum DismissButtonType {
-    case back, close
-    
-    public var iconSystemName: String {
-        switch self {
-            case .back:
-                return "chevron.backward"
-            case .close:
-                return "xmark"
-        }
-    }
-}
-
 final class NavigationControllerable: ViewControllable {
   
   var uiviewController: UIViewController { self.navigationController }
