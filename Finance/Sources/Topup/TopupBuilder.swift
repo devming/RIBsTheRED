@@ -12,7 +12,7 @@ import CombineUtil
 import FinanceEntity
 
 // Dependency: RIBlet이 동작하기 위해 필요한 것들을 선언해두는 곳
-protocol TopupDependency: Dependency {
+public protocol TopupDependency: Dependency {
     // 부모 RIBlet이 ViewController를 하나 지정해줘야한다.
     var topupBaseViewController: ViewControllable { get }
     var cardOnFileRepository: CardOnFileRepository { get }
@@ -43,17 +43,17 @@ final class TopupComponent: Component<TopupDependency>, TopupInteractorDependenc
 
 // MARK: - Builder
 
-protocol TopupBuildable: Buildable {
-    func build(withListener listener: TopupListener) -> TopupRouting
+public protocol TopupBuildable: Buildable {
+    func build(withListener listener: TopupListener) -> Routing
 }
 
-final class TopupBuilder: Builder<TopupDependency>, TopupBuildable {
+public final class TopupBuilder: Builder<TopupDependency>, TopupBuildable {
 
-    override init(dependency: TopupDependency) {
+    public override init(dependency: TopupDependency) {
         super.init(dependency: dependency)
     }
 
-    func build(withListener listener: TopupListener) -> TopupRouting {
+    public func build(withListener listener: TopupListener) -> Routing {
         let paymentMethodStream = CurrentValuePublisher(PaymentMethod(id: "", name: "", digits: "", color: "", isPrimary: false))
         
         let component = TopupComponent(dependency: dependency, paymentMethodStream: paymentMethodStream)

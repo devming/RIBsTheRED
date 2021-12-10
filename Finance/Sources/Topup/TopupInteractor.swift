@@ -39,7 +39,7 @@ protocol TopupRouting: Routing {
 }
 
 // topup RIBlet 자체 리스너
-protocol TopupListener: AnyObject {
+public protocol TopupListener: AnyObject {
     // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
     
     func topupDidClose()
