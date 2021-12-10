@@ -14,7 +14,6 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "ModernRIBs", url: "https://github.com/DevYeom/ModernRIBs", .exact("1.0.1")),
-        .package(path: "../Platform"),
         .package(path: "../Finance")
     ],
     targets: [
@@ -23,10 +22,13 @@ let package = Package(
         .target(
             name: "TransportHome",
             dependencies: [
-                "ModernRIBs"
+                "ModernRIBs",
+                .product(name: "FinanceHome", package: "Finance"),
+                .product(name: "FinanceRepository", package: "Finance"),
+                .product(name: "Topup", package: "Finance")
             ],
             resources: [
-                .process("Resources")
+                .process("Resources"),
             ]
         )
     ]
