@@ -13,22 +13,37 @@ import FinanceRepository
 import ProfileHome
 import TransportHome
 import TransportHomeImp
+import Topup
+import TopupImp
 
-final class AppRootComponent: Component<AppRootDependency>, AppHomeDependency, FinanceHomeDependency, ProfileHomeDependency, TransportHomeDependency {
+final class AppRootComponent: Component<AppRootDependency>, AppHomeDependency, FinanceHomeDependency, ProfileHomeDependency, TransportHomeDependency, TopupDependency {
+    
     let cardOnFileRepository: CardOnFileRepository
     let superPayRepository: SuperPayRepository
     
     lazy var transportHomeBuildable: TransportHomeBuildable = {
-        return TransportHomeBuilder(dependency: self)
+        TransportHomeBuilder(dependency: self)
     }()
+    
+    lazy var topupBuildable: TopupBuildable = {
+        TopupBuilder(dependency: self)
+    }()
+    
+    var topupBaseViewController: ViewControllable {
+        rootViewController.topViewControllable
+    }
+    
+    private let rootViewController: ViewControllable
     
     init(
         dependency: AppRootDependency,
         cardOnFileRepository: CardOnFileRepository,
-        superPayRepository: SuperPayRepository
+        superPayRepository: SuperPayRepository,
+        rootViewController: ViewControllable
     ) {
         self.cardOnFileRepository = cardOnFileRepository
         self.superPayRepository = superPayRepository
+        self.rootViewController = rootViewController
         super.init(dependency: dependency)
     }
     // TODO: Declare 'fileprivate' dependencies that are only used by this RIB.

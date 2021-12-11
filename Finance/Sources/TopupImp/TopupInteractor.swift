@@ -18,6 +18,7 @@ import FinanceRepository
 import CombineUtil
 import AddPaymentMethod
 import SuperUI
+import Topup
 
 protocol TopupRouting: Routing {
     func cleanupViews()
@@ -36,14 +37,6 @@ protocol TopupRouting: Routing {
     func detachCardOnFile()
     
     func popToRoot()
-}
-
-// topup RIBlet 자체 리스너
-public protocol TopupListener: AnyObject {
-    // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
-    
-    func topupDidClose()
-    func topupDidFinish()
 }
 
 // TopupInteractor의 의존성 - 필요한 의존성들을 한곳에 몰아넣고 주입받음

@@ -14,6 +14,9 @@ let package = Package(
             name: "Topup",
             targets: ["Topup"]),
         .library(
+            name: "TopupImp",
+            targets: ["TopupImp"]),
+        .library(
             name: "FinanceHome",
             targets: ["FinanceHome"]),
         .library(
@@ -40,7 +43,13 @@ let package = Package(
         .target(
             name: "Topup",
             dependencies: [
+                "ModernRIBs"
+            ]),
+        .target(
+            name: "TopupImp",
+            dependencies: [
                 "ModernRIBs",
+                "Topup",
                 "FinanceEntity",
                 "FinanceRepository",
                 "AddPaymentMethod",
