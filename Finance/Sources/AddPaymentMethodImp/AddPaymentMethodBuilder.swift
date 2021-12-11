@@ -8,6 +8,7 @@
 import ModernRIBs
 import FinanceRepository
 import RIBsUtil
+import AddPaymentMethod
 
 public protocol AddPaymentMethodDependency: Dependency {
     // TODO: Declare the set of dependencies required by this RIB, but cannot be
@@ -20,13 +21,6 @@ final class AddPaymentMethodComponent: Component<AddPaymentMethodDependency>, Ad
     
 
     // TODO: Declare 'fileprivate' dependencies that are only used by this RIB.
-}
-
-// MARK: - Builder
-
-public protocol AddPaymentMethodBuildable: Buildable {
-//    func build(withListener listener: AddPaymentMethodListener, closeButtonType: DismissButtonType) -> AddPaymentMethodRouting
-    func build(withListener listener: AddPaymentMethodListener, closeButtonType: DismissButtonType) -> ViewableRouting
 }
 
 public final class AddPaymentMethodBuilder: Builder<AddPaymentMethodDependency>, AddPaymentMethodBuildable {

@@ -16,6 +16,7 @@
 		CADF703727641FA50035E4D0 /* AppRootComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADF703627641FA50035E4D0 /* AppRootComponent.swift */; };
 		CADF703927641FFB0035E4D0 /* TransportHomeImp in Frameworks */ = {isa = PBXBuildFile; productRef = CADF703827641FFB0035E4D0 /* TransportHomeImp */; };
 		CADF703B276426A60035E4D0 /* TopupImp in Frameworks */ = {isa = PBXBuildFile; productRef = CADF703A276426A60035E4D0 /* TopupImp */; };
+		CADF703D27642DB40035E4D0 /* AddPaymentMethodImp in Frameworks */ = {isa = PBXBuildFile; productRef = CADF703C27642DB40035E4D0 /* AddPaymentMethodImp */; };
 		CAE361E02761997100D13D7B /* AddPaymentMethod in Frameworks */ = {isa = PBXBuildFile; productRef = CAE361DF2761997100D13D7B /* AddPaymentMethod */; };
 		CAE361E22762D05B00D13D7B /* FinanceEntity in Frameworks */ = {isa = PBXBuildFile; productRef = CAE361E12762D05B00D13D7B /* FinanceEntity */; };
 		CAE361E42762D05B00D13D7B /* FinanceRepository in Frameworks */ = {isa = PBXBuildFile; productRef = CAE361E32762D05B00D13D7B /* FinanceRepository */; };
@@ -60,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA92EB8C27337E020084754B /* CombineExt in Frameworks */,
+				CADF703D27642DB40035E4D0 /* AddPaymentMethodImp in Frameworks */,
 				CAE361E02761997100D13D7B /* AddPaymentMethod in Frameworks */,
 				CAE361E62762D05B00D13D7B /* CombineUtil in Frameworks */,
 				CA5F9D792762F57D00E07AF2 /* ProfileHome in Frameworks */,
@@ -183,6 +185,7 @@
 				CA5F9D782762F57D00E07AF2 /* ProfileHome */,
 				CADF703827641FFB0035E4D0 /* TransportHomeImp */,
 				CADF703A276426A60035E4D0 /* TopupImp */,
+				CADF703C27642DB40035E4D0 /* AddPaymentMethodImp */,
 			);
 			productName = SuperRedApp;
 			productReference = F5829F5526DB2BC400BFA8CD /* MiniSuperApp.app */;
@@ -489,6 +492,10 @@
 		CADF703A276426A60035E4D0 /* TopupImp */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TopupImp;
+		};
+		CADF703C27642DB40035E4D0 /* AddPaymentMethodImp */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AddPaymentMethodImp;
 		};
 		CAE361DF2761997100D13D7B /* AddPaymentMethod */ = {
 			isa = XCSwiftPackageProductDependency;
