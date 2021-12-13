@@ -86,7 +86,8 @@ let package = Package(
             name: "FinanceRepository",
             dependencies: [
                 "FinanceEntity", // 같은 패키지안에 다른 모듈 참조
-                .product(name: "CombineUtil", package: "Platform") // 다른 패키지 참조할 경우
+                .product(name: "CombineUtil", package: "Platform"), // 다른 패키지 참조할 경우
+                .product(name: "Network", package: "Platform")
             ]),
     ]
 )
