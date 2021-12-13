@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import FinanceEntity
 import CombineUtil
+import Network
 
 
 // server API를 호출해서 그 유저에게 등록된 카드 목록을 가져온다.
@@ -18,7 +19,6 @@ public protocol CardOnFileRepository {
 }
 
 public final class CardOnFileRepositoryImp: CardOnFileRepository {
-    public init() { }
     
     public var cardOnFile: ReadOnlyCurrentValuePublisher<[PaymentMethod]> {
         return paymentMethodSubject
@@ -39,12 +39,25 @@ public final class CardOnFileRepositoryImp: CardOnFileRepository {
     ])
     
     public func addCard(info: AddPaymentMethodInfo) -> AnyPublisher<PaymentMethod, Error> {
-        let paymentMethod = PaymentMethod(id: "00", name: "New 카드", digits: "\(info.number.suffix(4))", color: "", isPrimary: false)
         
-        var new = paymentMethodSubject.value
-        new.append(paymentMethod)
-        paymentMethodSubject.send(new)
+        let request = AddCardRequest(baseURL: baseURL, info: info)
         
-        return Just(paymentMethod).setFailureType(to: Error.self).eraseToAnyPublisher()
+        return network.send(request)
+            .map(\.output.card)
+            .handleEvents(receiveOutput: { [weak self] method in
+                guard let this = self else {
+                    return
+                }
+                this.paymentMethodSubject.send(this.paymentMethodSubject.value + [method])
+            })
+            .eraseToAnyPublisher()
+    }
+    
+    private let network: Network
+    private let baseURL: URL
+    
+    public init(network: Network, baseURL: URL) {
+        self.network = network
+        self.baseURL = baseURL
     }
 }

@@ -5,6 +5,7 @@
 //  Created by devming on 2021/11/08.
 //
 
+import Foundation
 import ModernRIBs
 import Combine
 import FinanceRepository
@@ -56,11 +57,13 @@ final class CardOnFileDashboardInteractor: PresentableInteractor<CardOnFileDashb
         super.didBecomeActive()
         // TODO: Implement business logic here.
         
-        dependency.cardsOnFileRepository.cardOnFile.sink { methods in
-            // vc는 그리라는 것만 최대한 그리게 하는 바보객체로 만들기 위해 
-            let viewModels = methods.prefix(5).map(PaymentMethodViewModel.init)
-            self.presenter.update(with: viewModels)
-        }.store(in: &cancellables)
+        dependency.cardsOnFileRepository.cardOnFile
+            .receive(on: DispatchQueue.main)
+            .sink { methods in
+                // vc는 그리라는 것만 최대한 그리게 하는 바보객체로 만들기 위해
+                let viewModels = methods.prefix(5).map(PaymentMethodViewModel.init)
+                self.presenter.update(with: viewModels)
+            }.store(in: &cancellables)
     }
 
     // interactor가 detach되기 직전에 호출됨

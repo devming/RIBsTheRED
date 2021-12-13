@@ -10,6 +10,7 @@ import Combine
 import FinanceEntity
 import FinanceRepository
 import AddPaymentMethod
+import Foundation
 
 protocol AddPaymentMethodRouting: ViewableRouting {
     // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
@@ -62,6 +63,7 @@ final class AddPaymentMethodInteractor: PresentableInteractor<AddPaymentMethodPr
     func didTapConfirm(with number: String, cvc: String, expiry: String) {
         let info = AddPaymentMethodInfo(number: number, cvc: cvc, expiry: expiry)
         dependency.cardOnFileRepository.addCard(info: info)
+            .receive(on: DispatchQueue.main)
             .sink { _ in
                 
             } receiveValue: { [weak self] method in

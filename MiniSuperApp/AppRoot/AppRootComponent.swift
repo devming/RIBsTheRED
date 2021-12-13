@@ -54,7 +54,7 @@ final class AppRootComponent: Component<AppRootDependency>, AppHomeDependency, F
         let network = NetworkImp(session: URLSession(configuration: config))
 //        let network = NetworkImp(session: URLSession.shared)  // 기본 URLSession
                 
-        self.cardOnFileRepository = CardOnFileRepositoryImp()
+        self.cardOnFileRepository = CardOnFileRepositoryImp(network: network, baseURL: BaseURL().financeBaseURL)
         self.superPayRepository = SuperPayRepositoryImp(network: network, baseURL: BaseURL().financeBaseURL)
         self.rootViewController = rootViewController
         super.init(dependency: dependency)
