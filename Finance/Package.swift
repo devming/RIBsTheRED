@@ -89,5 +89,11 @@ let package = Package(
                 .product(name: "CombineUtil", package: "Platform"), // 다른 패키지 참조할 경우
                 .product(name: "Network", package: "Platform")
             ]),
+        .testTarget(
+            name: "TopupImpTests",
+            dependencies: [
+                "TopupImp"
+            ]
+        )
     ]
 )
