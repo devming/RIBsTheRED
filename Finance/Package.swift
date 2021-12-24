@@ -28,6 +28,9 @@ let package = Package(
         .library(
             name: "FinanceRepository",
             targets: ["FinanceRepository"]),
+        .library(
+            name: "FinanceRepositoryTestSupport",
+            targets: ["FinanceRepositoryTestSupport"]),
     ],
     dependencies: [
         .package(name: "ModernRIBs", url: "https://github.com/DevYeom/ModernRIBs", .exact("1.0.1")),
@@ -89,10 +92,18 @@ let package = Package(
                 .product(name: "CombineUtil", package: "Platform"), // 다른 패키지 참조할 경우
                 .product(name: "Network", package: "Platform")
             ]),
+        .target(
+            name: "FinanceRepositoryTestSupport",
+            dependencies: [
+                "FinanceEntity", // 같은 패키지안에 다른 모듈 참조
+                "FinanceRepository",
+                .product(name: "CombineUtil", package: "Platform")
+            ]),
         .testTarget(
             name: "TopupImpTests",
             dependencies: [
-                "TopupImp"
+                "TopupImp",
+                "FinanceRepositoryTestSupport"
             ]
         )
     ]
